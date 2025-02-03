@@ -1,0 +1,8 @@
+{
+  "name": "server",
+  "dependencies": {
+    "hono": "4.6.20"
+  },
+  "devDependencies": {
+  }
+}
