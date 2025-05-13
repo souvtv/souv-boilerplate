@@ -1,14 +1,44 @@
-import {  Button, Card, HStack, Table } from '@chakra-ui/react'
+import {  Button, Card, Heading, HStack, Show, Table, VStack } from '@chakra-ui/react'
+import { useMutation } from '@client/api/mutation'
+import { useQuery } from '@client/api/query'
 import { Avatar } from '@client/components/ui/avatar'
-import React from 'react'
+import React, { useCallback } from 'react'
+import { hello$, mutation$, query$ } from 'types/graphql/fetchers'
+
+const helloFetcher = hello$.id.createdAt.createdBy.description.title
+const qry = query$.hellos(helloFetcher)
+
+const mut = mutation$.helloCreate(helloFetcher)
 
 export const Home = ()=>{
-    return <HStack w={'full'} wrap={'wrap'}>
-        <Button variant={'solid'}>Click</Button>
-        <Button variant={'ghost'}>Click</Button>
-        <Button variant={'outline'}>Click</Button>
-        <Button variant={'subtle'}>Click</Button>
-        <Button variant={'surface'}>Click</Button>
+    const {mutate, data:created} = useMutation(mut)
+
+    const {data,loading,stale } = useQuery(qry,{
+        variables:{
+            id:'1234'
+        }
+    })
+
+    const create = useCallback(()=>{
+            mutate({content:{
+                title: 'title',
+                description: 'description'
+            }})
+    }, [])
+
+    return <VStack>
+        <Heading>Loading: {`${loading}`}</Heading>
+        <Heading>Stale: {`${stale}`}</Heading>
+
+        <Heading>Created: {`${!!created?.helloCreate}`}</Heading>
+
+        <HStack w={'full'} wrap={'wrap'}>
+
+        <Button variant={'solid'} onClick={create}>Click</Button>
+        <Button variant={'ghost'} onClick={create}>Click</Button>
+        <Button variant={'outline'} onClick={create}>Click</Button>
+        <Button variant={'subtle'} onClick={create}>Click</Button>
+        <Button variant={'surface'} onClick={create}>Click</Button>
 
         <Card.Root width="320px">
         <Card.Body gap="2">
@@ -31,32 +61,42 @@ export const Home = ()=>{
         </Card.Footer>
         </Card.Root>
 
+        <Show when={!!created?.helloCreate}>
+                    <Card.Root width="320px">
+        <Card.Body gap="2">
+            <Avatar
+            src="https://avatar.iran.liara.run/public"
+            size="lg"
+            />
+            <Card.Title mt="2">{created?.helloCreate?.title}</Card.Title>
+            <Card.Description>
+            {created?.helloCreate?.description}
+            </Card.Description>
+        </Card.Body>
+        </Card.Root>
+        </Show>
+
         <Table.Root size="sm">
         <Table.Header>
             <Table.Row>
-            <Table.ColumnHeader>Product</Table.ColumnHeader>
-            <Table.ColumnHeader>Category</Table.ColumnHeader>
-            <Table.ColumnHeader textAlign="end">Price</Table.ColumnHeader>
+            <Table.ColumnHeader>Title</Table.ColumnHeader>
+            <Table.ColumnHeader>Created</Table.ColumnHeader>
+            <Table.ColumnHeader>Description</Table.ColumnHeader>
+            <Table.ColumnHeader textAlign="end">CreatedBy</Table.ColumnHeader>
             </Table.Row>
         </Table.Header>
         <Table.Body>
-            {items.map((item) => (
+            {data?.hellos?.map((item) => (
             <Table.Row key={item.id}>
-                <Table.Cell>{item.name}</Table.Cell>
-                <Table.Cell>{item.category}</Table.Cell>
-                <Table.Cell textAlign="end">{item.price}</Table.Cell>
+                <Table.Cell>{item?.title}</Table.Cell>
+                <Table.Cell>{item?.createdAt}</Table.Cell>
+                <Table.Cell>{item?.description}</Table.Cell>
+                <Table.Cell textAlign="end">{item.createdBy}</Table.Cell>
             </Table.Row>
             ))}
         </Table.Body>
         </Table.Root>
     </HStack>
+    </VStack>
 }
 
-
-const items = [
-    { id: 1, name: "Laptop", category: "Electronics", price: 999.99 },
-    { id: 2, name: "Coffee Maker", category: "Home Appliances", price: 49.99 },
-    { id: 3, name: "Desk Chair", category: "Furniture", price: 150.0 },
-    { id: 4, name: "Smartphone", category: "Electronics", price: 799.99 },
-    { id: 5, name: "Headphones", category: "Accessories", price: 199.99 },
-  ]

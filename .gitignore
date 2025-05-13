@@ -207,3 +207,6 @@ lerna-debug.log*
 
 # misc
 .DS_Store
+.schema.graphql.json
+types/_graphql
+types/graphql

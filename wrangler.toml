@@ -1,5 +1,5 @@
 name = "boilerplate"
-compatibility_date = "2024-12-19"
+compatibility_date = "2025-04-03"
 compatibility_flags = []
 workers_dev = true
 main = "server/src/index.ts"

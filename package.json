@@ -9,23 +9,28 @@
   "scripts": {
     "postinstall": "bun chakra typegen client/src/theme/index.ts",
     "dev": "wrangler dev",
-    "build": "bun esbuild.config.ts",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "build": "bun scripts/build.ts",
+    "types": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
-    "typescript": "5.7.3"
+    "graphql": "16.11.0"
   },
   "devDependencies": {
     "@chakra-ui/cli": "3.6.0",
-    "@cloudflare/workers-types": "4.20250129.0",
+    "@urql/introspection": "1.2.1",
+    "graphql-ts-client-codegen": "3.1.17",
     "@eslint/js": "9.19.0",
     "@types/bun": "latest",
     "@types/node": "22.13.0",
-    "esbuild": "0.24.2",
+    "esbuild": "0.25.4",
     "eslint": "9.19.0",
     "eslint-plugin-react": "7.37.4",
     "globals": "15.14.0",
+    "typescript": "5.7.3",
     "typescript-eslint": "8.22.0",
-    "wrangler": "3.107.2"
+    "wrangler": "4.15.0"
+  },
+  "overrides": {
+    "graphql": ">=16.9.0"
   }
 }

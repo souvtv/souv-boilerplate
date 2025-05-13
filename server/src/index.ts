@@ -1,9 +1,30 @@
 import { Hono } from 'hono'
+import graphql from './routes/graphql'
+import pages from './routes/pages'
 
-const app = new Hono<{ Bindings: CloudflareBindings }>()
+const app = new Hono<HonoEnv>()
 
-app.get('*', (c) => {
-  return c.env.ASSETS.fetch(c.req.raw)
+app.use((_ctx, next)=>{
+  // middleware
+
+  return next()
 })
+
+//
+//
+// API
+
+graphql(app, '/api')
+
+//
+//
+//
+
+//
+// Serve pages
+pages(app)
+//
+//
+
 
 export default app

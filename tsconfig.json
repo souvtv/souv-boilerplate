@@ -8,9 +8,6 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "allowJs": true,
-    "types": [
-        "@cloudflare/workers-types"
-    ],
     // Bundler mode
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -29,6 +26,9 @@
     "paths": {
       "@client/*": [
         "./client/src/*"
+      ],
+      "@server/*": [
+        "./server/src/*"
       ],
     }
   }
